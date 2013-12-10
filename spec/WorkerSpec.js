@@ -31,4 +31,9 @@ describe("html fetcher helpers", function(){
     var result = htmlFetcherHelpers.downloadUrls();
     expect(result).toBeTruthy();
   });
+
+  it("should ??", function(){
+    var result = htmlFetcherHelpers.downloadUrls();
+    expect(result).toBeTruthy();
+  });
 });

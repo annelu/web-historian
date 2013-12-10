@@ -1,11 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" type="text/css" href="styles.css" />
+  <!-- <link rel="stylesheet" type="text/css" href="styles.css" /> -->
+  <script src="./request-handler.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 </head>
 <body>
+  <script>
+    $(document).ready(function() {
+      $('.grabUrls').keypress(function(e){
+        var grabbedUrl = $('.grabUrls').val();
+        if (e.which == 13) {
+          $.ajax({
+            url: "127.0.0.1:8080",
+            type: "POST",
+            success: function() {
+              console.log("success!")
+
+            }
+          })
+        $('.grabUrls').val('');
+        }
+      })
+    })
+
+  </script>
   <form method="POST">
-    <input type="input" name="url"></input>
+    <input type="input" name="url" class="grabUrls"></input>
   </form>
+  <p>This is index!</p>
 </body>
 </html>
+
+<!-- $('.input').keypress(function (e) {
+  if (e.which == 13) {
+    $('form#login').submit();
+  }
+}); -->

@@ -9,22 +9,19 @@ exports.headers = headers = {
   'Content-Type': "text/html"
 };
 
-exports.writeResponse = function(res, input, status){
+exports.writeResponse = function(res, input, status, type){
+  headers['Content-Type'] = type;
   var thingToWrite;
-  if (input === '/') {
-    thingToWrite = "<input></input>";
-  } else {
-    thingToWrite = input;
-  }
+  thingToWrite = input;
   res.writeHead(status, headers);
   res.end(thingToWrite);
 };
 
-exports.serveStaticAssets = function(res, folder, status, asset) {
+exports.serveStaticAssets = function(res, folder, status, type, asset) {
   //Write some code here that helps serve up your static files!
   //(Static files are things like html (yours or arhived from others...), css, or anything that doesn't change often.)
-  //console.log("IM BEING CALLED");
-  exports.writeResponse(res, folder, status);
+  // console.log("IM BEING CALLED");
+  exports.writeResponse(res, folder, status, type);
 };
 
 // As you go through, keep thinking about what helper functions you can put here!

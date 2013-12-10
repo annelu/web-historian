@@ -12,9 +12,8 @@ exports.readUrls = function(filePath, cb){
   });
 };
 
-var writeToFile = function(body){
-  fs.writeFile('../../data/sites/', body, function(err, datum) {
-    console.log("data to write", body);
+var writeToFile = function(body, file){
+  fs.writeFile('../data/sites/' + 'www.yahoo.com', body, function(err, datum) {
     if (err) {
       console.log(err);
     }
@@ -22,17 +21,20 @@ var writeToFile = function(body){
   });
 };
 
-exports.downloadUrls = function(urls){
+exports.downloadUrls = function(urls) {
   var result = [1];
-  for (var i = 0; i < urls.length; i++) {
-    console.log(urls);
-  }
-  http.get('http://'+urls, function (err, res) {
-  if (err) {
-    console.error(err);
-    return;
-  }
-  console.log(res.code, res.headers, res.buffer.toString());
-  return result;
-});
+  http.get('http://www.' + "yahoo.com", function (res, err) {
+    if (err) {
+      console.log(err);
+    }
+    var body = '';
+    res.on('data', function(chunk){
+      body += chunk;
+    });
+    res.on('end', function(){
+      writeToFile(body, url); //figure out url
+    });
+    // console.log("HEADERS", res.headers, "BODY", res.all);
+  });
+  return true;
 };
