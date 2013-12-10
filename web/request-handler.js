@@ -22,8 +22,8 @@ var writeToFile = function(body){
 };
 
 var readFile = function(res, filename, status, type){
-  console.log(filename);
-  fs.readFile('.' + filename, 'utf-8', function(err, data) {
+  // console.log(filename);
+  fs.readFile('public/' + filename, 'utf-8', function(err, data) {
     if (err) {
       throw err;
     }
@@ -32,9 +32,11 @@ var readFile = function(res, filename, status, type){
   });
 };
 
+
 module.exports.handleRequest = function (req, res) {
   var status = 200;
   if (req.method === 'POST') {
+    console.log('a post happened!');
     status = 302;
     var body = '';
     req.on('data', function(chunk){
@@ -43,14 +45,15 @@ module.exports.handleRequest = function (req, res) {
     req.on('end', function(){
       body = body.slice(4);
       body += '\n';
+      console.log('body',body);
       writeToFile(body);
     });
-    readFile('success.html');
+    readFile(res, 'success.html', status);
   } else {
     var mimeType = mimeTypes[req.url.split('.')[mimeTypes.length - 1]];
     if (req.url === '/') {
       // httpHelpers.serveStaticAssets(res, readFile('index.html'), status);
-      readFile(res, '/public/index.html', status);
+      readFile(res, 'index.html', status);
      } else {
       readFile(res, req.url, status, mimeType);
      }
