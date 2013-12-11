@@ -13,7 +13,8 @@ var mimeTypes = {
 };
 
 var writeToFile = function(body){
-  fs.writeFile(module.exports.datadir, body, function(err, datum) {
+  console.log(module.exports.datadir);
+  fs.appendFile(module.exports.datadir, body, function(err, datum) {
     if (err) {
       console.log(err);
     }
@@ -27,7 +28,7 @@ var readFile = function(res, filename, status, type){
     if (err) {
       throw err;
     }
-    console.log('data we are trying to read', data, 'data we are trying to read');
+    // console.log('data we are trying to read', data, 'data we are trying to read');
     httpHelpers.serveStaticAssets(res, data, status, type);
   });
 };
@@ -36,7 +37,6 @@ var readFile = function(res, filename, status, type){
 module.exports.handleRequest = function (req, res) {
   var status = 200;
   if (req.method === 'POST') {
-    console.log('a post happened!');
     status = 302;
     var body = '';
     req.on('data', function(chunk){
@@ -45,12 +45,11 @@ module.exports.handleRequest = function (req, res) {
     req.on('end', function(){
       body = body.slice(4);
       body += '\n';
-      console.log('body',body);
       writeToFile(body);
     });
     readFile(res, 'success.html', status);
   } else {
-    var mimeType = mimeTypes[req.url.split('.')[mimeTypes.length - 1]];
+    var mimeType = mimeTypes[req.url.split('.')[1]];
     if (req.url === '/') {
       // httpHelpers.serveStaticAssets(res, readFile('index.html'), status);
       readFile(res, 'index.html', status);
