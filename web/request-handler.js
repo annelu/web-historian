@@ -13,7 +13,6 @@ var mimeTypes = {
 };
 
 var writeToFile = function(body){
-  console.log(module.exports.datadir);
   fs.appendFile(module.exports.datadir, body, function(err, datum) {
     if (err) {
       console.log(err);

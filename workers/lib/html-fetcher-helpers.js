@@ -14,7 +14,6 @@ exports.readUrls = function(filePath, cb){
 };
 
 exports.writeToFile = function(body, url, path){
-  console.log('url', url);
   fs.writeFile('../data/sites/' + url, body, function(err, datum) {
     if (err) {
       throw err;
@@ -24,24 +23,25 @@ exports.writeToFile = function(body, url, path){
 };
 
 exports.downloadUrls = function(urls) {
-  for (var i = 0; i < urls.length - 1; i++) {
-    urlArray.push(urls[i]);
-    http.get('http://' + urlArray[0], function (res, err) {
+
+  var download = function(num){
+    http.get('http://' + urls[num], function (res, err) {
       if (err) {
         throw err;
       }
-
       var body = '';
-
       res.on('data', function(chunk){
         body += chunk;
       });
       res.on('end', function(){
-        exports.writeToFile(body, urlArray[i]); //figure out url
+        exports.writeToFile(body, urls[num]); //figure out url
       });
 
     });
-  }
+  };
 
+  for (var i = 0; i < urls.length-1; i++) {
+    download(i);
+  }
   return true;
 };

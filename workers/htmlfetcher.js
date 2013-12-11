@@ -6,4 +6,5 @@ var url = require('url');
 var path = require('path');
 var http = require('http');
 var datadir = path.join(__dirname, "../data/sites.txt");
+// setInterval(); //call function repeatedly
 htmlFetchersHelpers.readUrls(datadir, htmlFetchersHelpers.downloadUrls);
