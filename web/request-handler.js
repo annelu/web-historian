@@ -2,6 +2,7 @@ var path = require('path');
 var httpHelpers = require('./http-helpers');
 var url = require('url');
 var fs = require('fs');
+var mysql = require("mysql");
 module.exports.datadir = path.join(__dirname, "../data/sites.txt"); // tests will need to override this.
 var htmlFetcherHelpers = require('../workers/lib/html-fetcher-helpers.js');
 var responseDirectory;
@@ -34,7 +35,22 @@ var readFile = function(res, filename, status, type){
 
 
 module.exports.handleRequest = function (req, res) {
+  var connectToDB = mysql.createConnection({
+    "hostname": "localhost",
+    "user": "root",
+    "password": "",
+    "database": "urlstorage"
+  });
   var status = 200;
+  connectToDB.connect(function(error) {
+    if (error) {
+        return console.log("CONNECTION error: " + error);
+    }
+  });
+  connectToDB.query('SELECT * FROM urladdresses2', function(err, row, columns) {
+    if (err) throw err;
+  });
+
   if (req.method === 'POST') {
     status = 302;
     var body = '';
@@ -44,7 +60,15 @@ module.exports.handleRequest = function (req, res) {
     req.on('end', function(){
       body = body.slice(4);
       body += '\n';
+      console.log('BODY: ', body);
       writeToFile(body);
+      var post = {urladdress: body};
+      console.log('POST: ', post);
+
+      connectToDB.query('INSERT INTO urladdresses2 SET ?', post, function(err, row, columns) {
+        if (err) throw err;
+        console.log('SUCCESSFULLY');
+      });
     });
     readFile(res, 'success.html', status);
   } else {
